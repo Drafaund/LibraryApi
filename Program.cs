@@ -8,6 +8,7 @@ using LibraryApi.Repositories;
 using LibraryApi.Services;
 using LibraryApi.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -49,6 +50,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
         options.Password.RequireNonAlphanumeric = false;
         options.User.RequireUniqueEmail = true;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -134,9 +136,20 @@ app.Services.GetRequiredService<AutoMapper.IConfigurationProvider>().AssertConfi
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var services = scope.ServiceProvider;
+    var db = services.GetRequiredService<AppDbContext>();
     await db.Database.MigrateAsync();
-    await DbSeeder.SeedAsync(db);
+
+    // The admin user is a development convenience only: no password is ever read outside Development.
+    var adminPassword = app.Environment.IsDevelopment() ? app.Configuration["Seed:AdminPassword"] : null;
+    if (app.Environment.IsDevelopment() && string.IsNullOrEmpty(adminPassword))
+        app.Logger.LogWarning("Seed__AdminPassword is not set in .env, so the {Email} user was not seeded.", DbSeeder.AdminEmail);
+
+    await DbSeeder.SeedAsync(
+        db,
+        services.GetRequiredService<RoleManager<IdentityRole>>(),
+        services.GetRequiredService<UserManager<ApplicationUser>>(),
+        adminPassword);
 }
 
 // Configure the HTTP request pipeline.
