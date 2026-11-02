@@ -1,7 +1,10 @@
+using FluentValidation;
 using LibraryApi.Data;
 using LibraryApi.Mappings;
 using LibraryApi.Models;
 using LibraryApi.Repositories;
+using LibraryApi.Services;
+using LibraryApi.Validators;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +26,16 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
-builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryRequestValidator>();
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookService, BookService>();
+
+// Async suffix kept so action names match the Async naming rule (CreatedAtAction(nameof(...Async))).
+// Model state filter off so FluentValidation in the services reports every 400 in the ServiceResult envelope.
+builder.Services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false)
+    .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

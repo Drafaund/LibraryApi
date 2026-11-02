@@ -7,4 +7,4 @@ public record UpdateBookRequest(
     int PublishedYear,
     int CategoryId,
     IReadOnlyList<int> AuthorIds,
-    int PrimaryAuthorId);
+    int PrimaryAuthorId) : IBookRequest;
