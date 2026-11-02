@@ -1,0 +1,19 @@
+# Build output
+bin/
+obj/
+
+# SQLite database (generated at runtime)
+*.db
+*.db-shm
+*.db-wal
+
+# Local configuration and secrets
+appsettings.*.local.json
+
+# IDE and editor
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+

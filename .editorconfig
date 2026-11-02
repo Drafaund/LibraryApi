@@ -1,0 +1,136 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,csproj,props,targets}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# Without this line IDE1006 is not reported by `dotnet build`, only in the IDE.
+dotnet_diagnostic.IDE1006.severity = warning
+
+# ---------------------------------------------------------------------------
+# Code style
+# ---------------------------------------------------------------------------
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_new_line_before_open_brace = all
+csharp_prefer_braces = when_multiline:suggestion
+dotnet_sort_system_directives_first = true
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+
+# ---------------------------------------------------------------------------
+# Naming conventions (violations are reported as IDE1006 and fail the build
+# once EnforceCodeStyleInBuild is on).
+# Rules are evaluated top to bottom, first match wins: keep specific before general.
+# ---------------------------------------------------------------------------
+
+# --- Styles ---
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_style.camel_case.capitalization = camel_case
+
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+
+dotnet_naming_style.interface_style.capitalization = pascal_case
+dotnet_naming_style.interface_style.required_prefix = I
+
+dotnet_naming_style.async_style.capitalization = pascal_case
+dotnet_naming_style.async_style.required_suffix = Async
+
+# --- Symbol groups ---
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_symbols.interfaces.applicable_accessibilities = *
+
+dotnet_naming_symbols.async_methods.applicable_kinds = method
+dotnet_naming_symbols.async_methods.applicable_accessibilities = *
+dotnet_naming_symbols.async_methods.required_modifiers = async
+
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.applicable_accessibilities = *
+dotnet_naming_symbols.constants.required_modifiers = const
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private, private_protected
+
+dotnet_naming_symbols.types_and_namespaces.applicable_kinds = class, struct, enum, delegate, namespace
+dotnet_naming_symbols.types_and_namespaces.applicable_accessibilities = *
+
+dotnet_naming_symbols.type_parameters.applicable_kinds = type_parameter
+dotnet_naming_symbols.type_parameters.applicable_accessibilities = *
+
+dotnet_naming_symbols.members.applicable_kinds = method, property, event, field
+dotnet_naming_symbols.members.applicable_accessibilities = *
+
+dotnet_naming_symbols.locals_and_parameters.applicable_kinds = parameter, local
+dotnet_naming_symbols.locals_and_parameters.applicable_accessibilities = *
+
+dotnet_naming_symbols.local_functions.applicable_kinds = local_function
+dotnet_naming_symbols.local_functions.applicable_accessibilities = *
+
+# --- Rules ---
+# Interfaces: IPascalCase
+dotnet_naming_rule.interfaces_must_start_with_i.symbols = interfaces
+dotnet_naming_rule.interfaces_must_start_with_i.style = interface_style
+dotnet_naming_rule.interfaces_must_start_with_i.severity = warning
+
+# Async methods: PascalCase with Async suffix
+dotnet_naming_rule.async_methods_must_end_with_async.symbols = async_methods
+dotnet_naming_rule.async_methods_must_end_with_async.style = async_style
+dotnet_naming_rule.async_methods_must_end_with_async.severity = warning
+
+# Constants: PascalCase (e.g. MaxTitleLength), never _camelCase
+dotnet_naming_rule.constants_must_be_pascal_case.symbols = constants
+dotnet_naming_rule.constants_must_be_pascal_case.style = pascal_case
+dotnet_naming_rule.constants_must_be_pascal_case.severity = warning
+
+# Private fields: _camelCase
+dotnet_naming_rule.private_fields_must_be_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_must_be_underscore_camel_case.style = underscore_camel_case
+dotnet_naming_rule.private_fields_must_be_underscore_camel_case.severity = warning
+
+# Classes, structs, enums, delegates, namespaces: PascalCase
+dotnet_naming_rule.types_must_be_pascal_case.symbols = types_and_namespaces
+dotnet_naming_rule.types_must_be_pascal_case.style = pascal_case
+dotnet_naming_rule.types_must_be_pascal_case.severity = warning
+
+dotnet_naming_rule.type_parameters_must_be_pascal_case.symbols = type_parameters
+dotnet_naming_rule.type_parameters_must_be_pascal_case.style = pascal_case
+dotnet_naming_rule.type_parameters_must_be_pascal_case.severity = warning
+
+# Methods, properties, events and remaining (non-private) fields: PascalCase
+dotnet_naming_rule.members_must_be_pascal_case.symbols = members
+dotnet_naming_rule.members_must_be_pascal_case.style = pascal_case
+dotnet_naming_rule.members_must_be_pascal_case.severity = warning
+
+dotnet_naming_rule.local_functions_must_be_pascal_case.symbols = local_functions
+dotnet_naming_rule.local_functions_must_be_pascal_case.style = pascal_case
+dotnet_naming_rule.local_functions_must_be_pascal_case.severity = warning
+
+# Local variables and parameters: camelCase
+dotnet_naming_rule.locals_and_parameters_must_be_camel_case.symbols = locals_and_parameters
+dotnet_naming_rule.locals_and_parameters_must_be_camel_case.style = camel_case
+dotnet_naming_rule.locals_and_parameters_must_be_camel_case.severity = warning
+
+# ---------------------------------------------------------------------------
+# Generated code: do not lint
+# ---------------------------------------------------------------------------
+[**/Migrations/*.cs]
+generated_code = true
+dotnet_diagnostic.IDE1006.severity = none
+dotnet_analyzer_diagnostic.severity = none
