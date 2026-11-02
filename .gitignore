@@ -7,8 +7,9 @@ obj/
 *.db-shm
 *.db-wal
 
-# Local configuration and secrets
+# Local configuration and secrets (.env.example is the committed template)
 appsettings.*.local.json
+.env
 
 # IDE and editor
 .vs/
