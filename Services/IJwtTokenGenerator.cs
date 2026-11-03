@@ -4,5 +4,5 @@ namespace LibraryApi.Services;
 
 public interface IJwtTokenGenerator
 {
-    (string Token, DateTime ExpiresAt) GenerateAccessToken(ApplicationUser user);
+    Task<(string Token, DateTime ExpiresAt)> GenerateAccessTokenAsync(ApplicationUser user);
 }

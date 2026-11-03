@@ -5,6 +5,8 @@ namespace LibraryApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+
+
 public abstract class ApiControllerBase : ControllerBase
 {
     // Failures map to one status each. A success is 200 with the envelope unless the caller

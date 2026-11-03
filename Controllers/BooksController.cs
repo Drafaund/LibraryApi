@@ -1,3 +1,4 @@
+using LibraryApi.Common;
 using LibraryApi.DTOs.Books;
 using LibraryApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,7 @@ public class BooksController : ApiControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> CreateAsync(CreateBookRequest request, CancellationToken cancellationToken)
     {
         var result = await _service.CreateAsync(request, cancellationToken);
@@ -41,12 +43,14 @@ public class BooksController : ApiControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> UpdateAsync(int id, UpdateBookRequest request, CancellationToken cancellationToken)
     {
         return ToActionResult(await _service.UpdateAsync(id, request, cancellationToken));
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
     {
         return ToActionResult(await _service.DeleteAsync(id, cancellationToken), NoContent);

@@ -29,4 +29,17 @@ public class AuthController : ApiControllerBase
     {
         return ToActionResult(await _service.LoginAsync(request, cancellationToken));
     }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshAsync(RefreshTokenRequest request, CancellationToken cancellationToken)
+    {
+        return ToActionResult(await _service.RefreshAsync(request, cancellationToken));
+    }
+
+    // 200 with the envelope instead of 204, so every body keeps the same shape.
+    [HttpPost("logout")]
+    public async Task<IActionResult> LogoutAsync(RefreshTokenRequest request, CancellationToken cancellationToken)
+    {
+        return ToActionResult(await _service.LogoutAsync(request, cancellationToken));
+    }
 }

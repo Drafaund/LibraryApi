@@ -1,3 +1,4 @@
+using LibraryApi.Common;
 using LibraryApi.DTOs.Categories;
 using LibraryApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,7 @@ public class CategoriesController : ApiControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> CreateAsync(CreateCategoryRequest request, CancellationToken cancellationToken)
     {
         var result = await _service.CreateAsync(request, cancellationToken);
@@ -36,12 +38,14 @@ public class CategoriesController : ApiControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> UpdateAsync(int id, UpdateCategoryRequest request, CancellationToken cancellationToken)
     {
         return ToActionResult(await _service.UpdateAsync(id, request, cancellationToken));
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
     {
         return ToActionResult(await _service.DeleteAsync(id, cancellationToken), NoContent);

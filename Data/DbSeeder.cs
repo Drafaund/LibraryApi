@@ -7,7 +7,7 @@ namespace LibraryApi.Data;
 
 public static class DbSeeder
 {
-    public const string AdminEmail = "admin@library.local";
+    public const string AdminEmail = "admin@gmail.com";
 
     // A null adminPassword means "do not seed the admin user" (every environment except Development).
     public static async Task SeedAsync(
